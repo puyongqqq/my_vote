@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import 'vant/lib/button/style'
 import '@vant/touch-emulator'
+import Router from './router.js';
 
 import { Form, Field , Button, Toast, Tabbar, TabbarItem } from 'vant';
 
@@ -24,3 +25,5 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
 }).$mount('#app')
+
+
