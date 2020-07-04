@@ -28,7 +28,7 @@
 
 <script>
 import $http from "../utils/http.js";
-import { Toast } from 'vant';
+import { Toast } from "vant";
 export default {
   name: "login",
   data() {
@@ -40,8 +40,8 @@ export default {
   methods: {
     onSubmit(values) {
       Toast.loading({
-        message: '登录中...',
-        forbidClick: true,
+        message: "登录中...",
+        forbidClick: true
       });
       $http.$axios
         .post("oauth/token", values, {
@@ -61,18 +61,18 @@ export default {
           ]
         })
         .then(res => {
-          if (res.status === 200 && res.data.code === '200') {
+          if (res.status === 200 && res.data.code === "200") {
             // 登录成功
-            localStorage.setItem('vote_token', res.data.token);
+            localStorage.setItem("vote_token", res.data.token);
             // Toast.success(res.data.msg);
             // this.$router.push({path: '/index'})
-            this.$router.push({path:'/index'})
+            this.$router.push({ path: "/index" });
           } else {
             // 登录失败
             Toast.fail(res.data.msg);
           }
 
-          console.log(localStorage.getItem('vote_token'))
+          console.log(localStorage.getItem("vote_token"));
         });
     }
   }
