@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     onSubmit(values) {
-      Toast.loading({
+      let loading = Toast.loading({
         message: "登录中...",
         forbidClick: true
       });
@@ -69,15 +69,17 @@ export default {
           ]
         })
         .then(res => {
+          loading.clear();
           if (res.status === 200 && res.data.code === "200") {
             // 登录成功
             localStorage.setItem("vote_token", res.data.token);
-            // Toast.success(res.data.msg);
-            // this.$router.push({path: '/index'})
             this.$router.push({ path: "/index" });
           } else {
             // 登录失败
-            Toast.fail(res.data.msg);
+            Toast.fail({
+              message: res.data.msg,
+              icon: 'cross',
+            });
           }
 
           console.log(localStorage.getItem("vote_token"));

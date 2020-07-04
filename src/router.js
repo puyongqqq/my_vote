@@ -11,6 +11,8 @@ import Login from './components/Login.vue'
 
 import Register from './components/Register.vue'
 
+import MyVote from './views/MyVote'
+
 //定义routes路由的集合，数组类型
 const routes = [
     //单个路由均为对象类型，path代表的是路径，component代表组件
@@ -38,6 +40,13 @@ const routes = [
         component: Register,
         meta: {
             title: '注册 | 投票系统'
+        }
+    },
+    {
+        path: '/myVote',
+        component: MyVote,
+        meta: {
+            title: '我的 | 投票系统'
         }
     }
 ]
