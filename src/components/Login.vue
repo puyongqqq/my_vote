@@ -19,6 +19,13 @@
         maxlength="20"
         :rules="[{ required: true, message: '请填写密码'}, {maxLength: 20, message: '不能超过20字符'}]"
       />
+      <!-- <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
+        <template #button>
+          <van-image @click="getCheckcode" src="https://img.yzcdn.cn/vant/cat.jpeg">
+            <template v-slot:error>加载失败</template>
+          </van-image>
+        </template>
+      </van-field> -->
       <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit">提交</van-button>
       </div>
@@ -34,7 +41,8 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      sms: ''
     };
   },
   methods: {
@@ -74,6 +82,8 @@ export default {
 
           console.log(localStorage.getItem("vote_token"));
         });
+    },
+    getCheckcode: function() {
     }
   }
 };
@@ -84,4 +94,9 @@ export default {
   margin: 20px auto;
   padding: 20px;
 }
+.van-image {
+  width: 100px;
+  height: 35px;
+}
+
 </style>
