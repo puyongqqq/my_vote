@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# my-vote
-my-vote
-=======
 # my_vote
 
 ## Project setup
