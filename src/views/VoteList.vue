@@ -1,12 +1,18 @@
 <template>
   <div class="vote-list">
+    <van-search v-model="value" shape="round" show-action placeholder="请输入搜索关键词" maxlength="30" @search="onSearch">
+      <template #action>
+        <!-- <div @click="onSearch">搜索</div> -->
+        <van-button round type="info" @click="onSearch" size="small">搜索</van-button>
+      </template>
+    </van-search>
     <!-- 切换 -->
     <!-- <div class="vote-list-switch">
         <div>
             {{ showJoin ? '我参与的' : '我创建的' }}
         </div>
       <van-switch v-model="showJoin" active-color="#07c160" inactive-color="#ee0a24" />
-    </div> -->
+    </div>-->
 
     <!-- 列表 -->
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -30,11 +36,12 @@ export default {
   name: "voteList",
   data() {
     return {
+      value: '',
       showJoin: true,
       list: [],
       loading: false,
       finished: false,
-      refreshing: false,
+      refreshing: false
     };
   },
   methods: {
@@ -63,6 +70,9 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
+    },
+    onSearch() {
+      console.log('2123123123 ssss');
     }
   }
 };
@@ -78,10 +88,18 @@ export default {
 }
 
 .vote-list-switch {
-    display: inline;
+  display: inline;
 }
 
 .vote-list {
   margin: 10px auto;
+}
+
+.van-button--small {
+  padding: 0 15px;
+}
+
+.van-search__action:active {
+    background-color: unset;
 }
 </style>
