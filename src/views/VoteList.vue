@@ -1,12 +1,12 @@
 <template>
   <div class="vote-list">
     <!-- 切换 -->
-    <div class="vote-list-switch">
+    <!-- <div class="vote-list-switch">
         <div>
             {{ showJoin ? '我参与的' : '我创建的' }}
         </div>
       <van-switch v-model="showJoin" active-color="#07c160" inactive-color="#ee0a24" />
-    </div>
+    </div> -->
 
     <!-- 列表 -->
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -50,7 +50,7 @@ export default {
         }
         this.loading = false;
 
-        if (this.list.length >= 10) {
+        if (this.list.length >= 1) {
           this.finished = true;
         }
       }, 1000);
@@ -79,5 +79,9 @@ export default {
 
 .vote-list-switch {
     display: inline;
+}
+
+.vote-list {
+  margin: 10px auto;
 }
 </style>

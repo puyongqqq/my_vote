@@ -24,11 +24,34 @@ import AddVote from './views/AddVote'
 const routes = [
     //单个路由均为对象类型，path代表的是路径，component代表组件
     {
-        path: '/index',
+        path: '/',
         component: Index,
         meta: {
             title: '首页 | 投票系统'
-        }
+        },
+        children: [
+            {
+                path: '/list',
+                component: VoteList,
+                meta: {
+                    title: '列表 | 投票系统'
+                }
+            },
+            {
+                path: '/addVote',
+                component: AddVote,
+                meta: {
+                    title: '创建 | 投票系统'
+                }
+            },
+            {
+                path: '/myVote',
+                component: MyVote,
+                meta: {
+                    title: '我的 | 投票系统'
+                }
+            }
+        ]
     },
     {
         path: "/login",
@@ -40,34 +63,13 @@ const routes = [
     //可以配置重定向
     {
         path: '',
-        redirect: "index"
+        redirect: "/"
     },
     {
         path: '/register',
         component: Register,
         meta: {
             title: '注册 | 投票系统'
-        }
-    },
-    {
-        path: '/myVote',
-        component: MyVote,
-        meta: {
-            title: '我的 | 投票系统'
-        }
-    },
-    {
-        path: '/list',
-        component: VoteList,
-        meta: {
-            title: '列表 | 投票系统'
-        }
-    },
-    {
-        path: '/addVote',
-        component: AddVote,
-        meta: {
-            title: '创建 | 投票系统'
         }
     }
 ]

@@ -15,32 +15,54 @@
       </div>
     </div>
     <van-cell-group>
-      <van-cell center title="性别" value="男"/>
+      <van-cell center title="性别" value="男" />
       <van-cell title="邮箱" value="ppp1296286317@163.com" />
     </van-cell-group>
 
     <van-cell-group>
       <van-cell center title="生日" value="2020-07-15">
-        <template #right-icon>
+        <!-- <template #right-icon>
           <van-popup v-model="show" round position="bottom" :style="{ height: '30%' }"/>
-        </template>
+        </template>-->
       </van-cell>
       <van-cell title="部门" value="破产与清算结算测试部" />
     </van-cell-group>
 
     <div style="margin: 16px;">
-      <van-button round block type="danger" native-type="type">退出账号</van-button>
+      <van-button round block type="danger" @click="logout" native-type="type">退出账号</van-button>
     </div>
   </div>
 </template>
 <script>
+import { Dialog } from 'vant';
 export default {
   name: "myvote",
   data() {
     return {
       checked: true,
-      show: '',
-    };
+      show: ""
+    }
+  },
+  // components: {
+  //   [Dialog.Component.name]: Dialog.Component,
+  // },
+  methods: {
+    logout: () => {
+      Dialog.confirm({
+        title: "确定要退出登录？",
+        confirmButtonColor: 'blue',
+      })
+        .then(() => {
+          console.log('退出登录~');
+          // localStorage.removeItem('vote_token');
+          // this.$router.push({ path: "/login" });
+          localStorage.removeItem("vote_token");
+          this.$router.push({ path: "/login" });
+        })
+        .catch(() => {
+          console.log('取消')
+        });
+    }
   }
 };
 </script>

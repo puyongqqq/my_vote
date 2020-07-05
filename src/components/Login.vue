@@ -8,8 +8,8 @@
         label="用户名"
         placeholder="请输入用户名"
         maxlength="20"
-        error
         required
+        :rules="[{ required: true, message: '请填写用户名' }]"
       />
       <van-field
         v-model="password"
@@ -18,8 +18,8 @@
         label="密码"
         placeholder="请输入密码"
         maxlength="20"
-        error
         required
+        :rules="[{ required: true, message: '请填写用户名' }]"
       />
       <!-- <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
         <template #button>
@@ -75,7 +75,7 @@ export default {
           if (res.status === 200 && res.data.code === "200") {
             // 登录成功
             localStorage.setItem("vote_token", res.data.token);
-            this.$router.push({ path: "/index" });
+            this.$router.push({ path: "/list" });
           } else {
             // 登录失败
             Toast.fail({

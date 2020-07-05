@@ -70,7 +70,7 @@
           </template>
         </van-field>
 
-        <van-field name="switch2" label="截止时间">
+        <!-- <van-field name="switch2" label="截止时间">
           <template #input>
             <van-datetime-picker
               v-model="currentDate"
@@ -78,7 +78,7 @@
               title="选择截止时间"
             />
           </template>
-        </van-field>
+        </van-field> -->
       </div>
 
       <div style="margin: 16px;">
@@ -164,6 +164,10 @@ export default {
 .my-card {
   margin: 5px;
   padding: 10px auto;
+}
+
+.add-vote {
+  margin: 10px auto;
 }
 </style>
 
