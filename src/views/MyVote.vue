@@ -34,33 +34,24 @@
   </div>
 </template>
 <script>
-import { Dialog } from 'vant';
+import { Dialog } from "vant";
 export default {
   name: "myvote",
   data() {
     return {
       checked: true,
       show: ""
-    }
+    };
   },
-  // components: {
-  //   [Dialog.Component.name]: Dialog.Component,
-  // },
   methods: {
-    logout: () => {
+    logout () {
       Dialog.confirm({
         title: "确定要退出登录？",
-        confirmButtonColor: 'blue',
-      })
-        .then(() => {
-          console.log('退出登录~');
-          // localStorage.removeItem('vote_token');
-          // this.$router.push({ path: "/login" });
+        confirmButtonColor: "blue"
+      }).then(() => {
           localStorage.removeItem("vote_token");
-          this.$router.push({ path: "/login" });
-        })
-        .catch(() => {
-          console.log('取消')
+          this.$router.push({ path: '/login' })
+        }).catch(() => {
         });
     }
   }

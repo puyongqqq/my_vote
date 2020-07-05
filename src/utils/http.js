@@ -2,7 +2,7 @@ import axios from 'axios';
 // import qs from 'qs';
 
 var $axios = axios.create({
-    baseURL: 'http://localhost:8066/',
+    baseURL: 'http://localhost:8888/',
     timeout: 6000,
     headers: {'Authorization': 'XMLHttpRequest'},
 });

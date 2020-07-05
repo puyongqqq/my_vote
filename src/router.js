@@ -27,28 +27,32 @@ const routes = [
         path: '/',
         component: Index,
         meta: {
-            title: '首页 | 投票系统'
+            title: '首页 | 投票系统',
+            requireAuth: true,
         },
         children: [
             {
                 path: '/list',
                 component: VoteList,
                 meta: {
-                    title: '列表 | 投票系统'
+                    title: '列表 | 投票系统',
+                    requireAuth: true,
                 }
             },
             {
                 path: '/addVote',
                 component: AddVote,
                 meta: {
-                    title: '创建 | 投票系统'
+                    title: '创建 | 投票系统',
+                    requireAuth: true,
                 }
             },
             {
                 path: '/myVote',
                 component: MyVote,
                 meta: {
-                    title: '我的 | 投票系统'
+                    title: '我的 | 投票系统',
+                    requireAuth: true,
                 }
             }
         ]
@@ -57,19 +61,22 @@ const routes = [
         path: "/login",
         component: Login,
         meta: {
-            title: '登录 | 投票系统'
+            title: '登录 | 投票系统',
+            requireAuth: false,
         }
     },
     //可以配置重定向
     {
         path: '',
-        redirect: "/"
+        redirect: "/",
+        requireAuth: true,
     },
     {
         path: '/register',
         component: Register,
         meta: {
-            title: '注册 | 投票系统'
+            title: '注册 | 投票系统',
+            requireAuth: false,
         }
     }
 ]
@@ -80,5 +87,24 @@ const router = new VueRouter({
     routes
 });
 
-//抛出这个这个实例对象方便外部读取以及访问
+router.beforeEach((to, from, next) => {
+    let title = to.meta && to.meta.title;
+    if (title) {
+        document.title = title;
+    }
+    if (to.matched.some(res => res.meta.requireAuth)) { // 验证是否需要登陆 
+        if (localStorage.getItem('vote_token')) { // 查询本地存储信息是否已经登陆 
+            next();
+        } else {
+            next({
+                path: '/login', // 未登录则跳转至login页面 
+                query: { redirect: to.fullPath } // 登陆成功后回到当前页面，这里传值给login页面，to.fullPath为当前点击的页面 
+            });
+        }
+    } else {
+        next();
+    }
+})
+
+// 抛出这个这个实例对象方便外部读取以及访问
 export default router

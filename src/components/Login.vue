@@ -18,6 +18,7 @@
         label="密码"
         placeholder="请输入密码"
         maxlength="20"
+        autocomplete
         required
         :rules="[{ required: true, message: '请填写用户名' }]"
       />
@@ -54,7 +55,7 @@ export default {
         forbidClick: true
       });
       $http.$axios
-        .post("oauth/token", values, {
+        .post("user/oauth/token", values, {
           transformRequest: [
             function(data) {
               let ret = "";
@@ -83,8 +84,6 @@ export default {
               icon: 'cross',
             });
           }
-
-          console.log(localStorage.getItem("vote_token"));
         });
     },
     getCheckcode: function() {
