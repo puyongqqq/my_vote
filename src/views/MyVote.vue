@@ -15,11 +15,7 @@
       </div>
     </div>
     <van-cell-group>
-      <van-cell center title="性别">
-        <template #right-icon>
-          <van-switch v-model="checked" size="16px" />
-        </template>
-      </van-cell>
+      <van-cell center title="性别" value="男"/>
       <van-cell title="邮箱" value="ppp1296286317@163.com" />
     </van-cell-group>
 

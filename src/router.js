@@ -5,13 +5,20 @@ import VueRouter from 'vue-router';
 //第三方库需要use一下才能用
 Vue.use(VueRouter)
 
-import Index from './components/Index.vue'
+import Index from './components/Index'
 
-import Login from './components/Login.vue'
+import Login from './components/Login'
 
-import Register from './components/Register.vue'
+import Register from './components/Register'
 
+// 我的信息
 import MyVote from './views/MyVote'
+
+// 投票列表
+import VoteList from './views/VoteList'
+
+// 新增投票
+import AddVote from './views/AddVote'
 
 //定义routes路由的集合，数组类型
 const routes = [
@@ -47,6 +54,20 @@ const routes = [
         component: MyVote,
         meta: {
             title: '我的 | 投票系统'
+        }
+    },
+    {
+        path: '/list',
+        component: VoteList,
+        meta: {
+            title: '列表 | 投票系统'
+        }
+    },
+    {
+        path: '/addVote',
+        component: AddVote,
+        meta: {
+            title: '创建 | 投票系统'
         }
     }
 ]

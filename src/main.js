@@ -7,7 +7,7 @@ import '@vant/touch-emulator'
 
 Vue.config.productionTip = false
 
-import { Form, Field , Button, Tabbar, TabbarItem, Image as VanImage, NavBar, List, Card, Dialog, Cell, CellGroup, PullRefresh, Tag, Slider, Switch, Popup } from 'vant';
+import { Form, Field , Button, Tabbar, TabbarItem, Image as VanImage, NavBar, List, Card, Dialog, Cell, CellGroup, PullRefresh, Tag, Slider, Switch, Popup, Icon, DatetimePicker } from 'vant';
 Vue.use(Form);
 Vue.use(Field);
 Vue.use(Button);
@@ -27,6 +27,8 @@ Vue.use(Tag);
 Vue.use(Slider);
 Vue.use(Switch);
 Vue.use(Popup);
+Vue.use(Icon);
+Vue.use(DatetimePicker);
 
 new Vue({
   router,
