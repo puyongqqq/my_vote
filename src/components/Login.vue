@@ -28,7 +28,7 @@
             <template v-slot:error>加载失败</template>
           </van-image>
         </template>
-      </van-field> -->
+      </van-field>-->
       <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit">提交</van-button>
       </div>
@@ -45,19 +45,22 @@ export default {
     return {
       username: "",
       password: "",
-      sms: ''
+      sms: "",
     };
   },
   methods: {
     onSubmit(values) {
       let loading = Toast.loading({
         message: "登录中...",
-        forbidClick: true
+        forbidClick: true,
       });
+
+      console.log(values);
+
       $http.$axios
         .post("user/oauth/token", values, {
           transformRequest: [
-            function(data) {
+            function (data) {
               let ret = "";
               for (let it in data) {
                 ret +=
@@ -66,12 +69,11 @@ export default {
                   encodeURIComponent(data[it]) +
                   "&";
               }
-              ret = ret.substring(0, ret.lastIndexOf("&"));
               return ret;
-            }
+            },
           ]
         })
-        .then(res => {
+        .then((res) => {
           loading.clear();
           if (res.status === 200 && res.data.code === "200") {
             // 登录成功
@@ -81,14 +83,13 @@ export default {
             // 登录失败
             Toast.fail({
               message: res.data.msg,
-              icon: 'cross',
+              icon: "cross",
             });
           }
         });
     },
-    getCheckcode: function() {
-    }
-  }
+    getCheckcode: function () {},
+  },
 };
 </script>
 
@@ -101,5 +102,4 @@ export default {
   width: 100px;
   height: 35px;
 }
-
 </style>

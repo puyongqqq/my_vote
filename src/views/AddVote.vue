@@ -1,18 +1,19 @@
 <template>
   <div class="add-vote">
-    <van-form validate-first @failed="onFailed">
+    <van-form validate-first @submit="onSubmit">
       <div class="my-card">
         <van-field
-          v-model="value1"
+          v-model="caseTitle"
           rows="1"
           autosize
           label="标题"
           type="textarea"
+          :rules="[{ required: true, message: '请输入正确的投票标题' }]"
           placeholder="请输入投票标题"
           maxlength="50"
         />
         <van-field
-          v-model="value2"
+          v-model="caseDesc"
           rows="3"
           autosize
           label="描述"
@@ -23,11 +24,12 @@
         />
 
         <van-field
-          v-model="value3"
+          v-model="caseItem1"
           rows="1"
           autosize
+          :rules="[{ required: true, message: '请输入正确的内容' }]"
           type="textarea"
-          placeholder="选项一"
+          placeholder="选项"
           maxlength="50"
         >
           <template #label>
@@ -38,27 +40,31 @@
           </template>
         </van-field>
 
-        <van-field rows="1" autosize type="textarea" placeholder="选项二" maxlength="50">
-          <template #label>
-            <div class="add-case">
-              <van-icon name="close" @click="remove" />
-              <div class="vote-case">选项</div>
-            </div>
-          </template>
-        </van-field>
-
-        <van-field rows="1" autosize type="textarea" placeholder="选项三" maxlength="50">
-          <template #label>
-            <div class="add-case">
-              <van-icon name="close" @click="remove" />
-              <div class="vote-case">选项</div>
-            </div>
-          </template>
-        </van-field>
+        <div class="add-case-list">
+          <van-field
+            class="add-case"
+            v-for="(item, i) in caseList"
+            :key="i"
+            v-model="item.value"
+            rows="1"
+            autosize
+            :rules="[{ required: true, message: '请输入正确的内容' }]"
+            type="textarea"
+            placeholder="选项"
+            maxlength="50"
+          >
+            <template #label>
+              <div class="add-case">
+                <van-icon name="close" @click="remove(i)" />
+                <div class="vote-case">选项</div>
+              </div>
+            </template>
+          </van-field>
+        </div>
       </div>
 
       <div class="my-card">
-        <van-field name="switch" label="是否匿名">
+        <van-field name="switch" label="是否多选">
           <template #input>
             <van-switch v-model="switchChecked" size="20" />
           </template>
@@ -70,15 +76,23 @@
           </template>
         </van-field>
 
-        <!-- <van-field name="switch2" label="截止时间">
-          <template #input>
-            <van-datetime-picker
-              v-model="currentDate"
-              type="datetime"
-              title="选择截止时间"
-            />
-          </template>
-        </van-field> -->
+        <van-field
+          readonly
+          clickable
+          name="datetimePicker"
+          :value="value"
+          label="截止时间"
+          placeholder="点击选择时间"
+          @click="showPicker = true"
+        />
+        <van-popup v-model="showPicker" round position="bottom">
+          <van-datetime-picker
+            type="datetime"
+            :min-date="minDate"
+            @confirm="onConfirm"
+            @cancel="showPicker = false"
+          />
+        </van-popup>
       </div>
 
       <div style="margin: 16px;">
@@ -90,23 +104,24 @@
 
 <script>
 import { Toast } from "vant";
+import { Dialog } from 'vant';
 
 export default {
   name: "addVote",
   data() {
     return {
-      value1: "",
-      value2: "",
-      value4: "",
-      value5: "",
-      value7: "",
-      value3: "",
-      pattern: /\d{6}/,
-      caseList: [],
+      caseTitle: "",
+      caseDesc: "",
+      caseItem1: "",
       checked: true,
       switchChecked: true,
       switchChecked2: false,
-      currentDate: ''
+      currentDate: "",
+      itemIndex: 1,
+      caseList: [{ value: "", index: 1 }],
+      value: "",
+      showPicker: false,
+      minDate: new Date()
     };
   },
   methods: {
@@ -125,12 +140,64 @@ export default {
         }, 1000);
       });
     },
-    onFailed(errorInfo) {
-      console.log("failed", errorInfo);
+
+    /**
+     * form提交
+     */
+    onSubmit(values) {
+      Dialog.confirm({
+        message: "确定要添加投票信息吗？",
+        confirmButtonColor: "blue"
+      })
+        .then(() => {
+          // on confirm
+          console.log("submit", values);
+        })
+        .catch(() => {
+          // on cancel
+
+          console.log("submit", values);
+        });
+      
     },
 
-    addCase() {},
-    remove() {}
+    /**
+     * 截止时间选择
+     */
+    onConfirm(time) {
+      this.showPicker = false;
+
+      this.value =
+        time.getFullYear() +
+        "/" +
+        (time.getMonth() + 1 > 9
+          ? time.getMonth() + 1
+          : "0" + (time.getMonth() + 1)) +
+        "/" +
+        (time.getDate() > 9 ? time.getDate() : "0" + time.getDate()) +
+        " " +
+        (time.getHours() > 9 ? time.getHours() : "0" + time.getHours()) +
+        ":" +
+        (time.getMinutes() > 9 ? time.getMinutes() : "0" + time.getMinutes());
+    },
+
+    /**
+     * 添加选项
+     */
+    addCase() {
+      this.itemIndex++;
+      this.caseList.push({
+        value: "",
+        index: this.itemIndex
+      });
+    },
+
+    /**
+     * 删除选项
+     */
+    remove(i) {
+      this.caseList.splice(i, 1);
+    }
   }
 };
 </script>
@@ -162,12 +229,12 @@ export default {
 }
 
 .my-card {
-  margin: 5px;
+  margin: 5px auto;
   padding: 10px auto;
 }
 
 .add-vote {
-  margin: 10px auto;
+  margin: 10px auto 100px;
 }
 </style>
 

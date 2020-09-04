@@ -1,6 +1,13 @@
 <template>
   <div class="vote-list">
-    <van-search v-model="value" shape="round" show-action placeholder="请输入搜索关键词" maxlength="30" @search="onSearch">
+    <van-search
+      v-model="voteTitle"
+      shape="round"
+      show-action
+      placeholder="请输入搜索关键词"
+      maxlength="30"
+      @search="onSearch"
+    >
       <template #action>
         <!-- <div @click="onSearch">搜索</div> -->
         <van-button round type="info" @click="onSearch" size="small">搜索</van-button>
@@ -15,14 +22,15 @@
     </div>-->
 
     <!-- 列表 -->
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <div v-for="item in list" :key="item">
+    <van-pull-refresh v-model="refreshing">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了">
+        <div v-for="(item, i) in respData"
+            :key="i">
           <van-card
             num="2"
-            price="2.00"
-            desc="描述信息"
-            title="商品标题"
+            :price="item.deadline | dateString"
+            :desc="item.voteDesc"
+            :title="item.voteTitle"
             thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
           />
         </div>
@@ -32,35 +40,37 @@
 </template>
 
 <script>
+import $http from "../utils/http.js";
+import { Toast } from "vant";
 export default {
   name: "voteList",
   data() {
     return {
-      value: '',
+      voteTitle: "",
       showJoin: true,
-      list: [],
+      respData: [],
       loading: false,
       finished: false,
-      refreshing: false
+      refreshing: false,
+      pageNum: 1,
+      pageSize: 10,
     };
   },
   methods: {
     onLoad() {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = [];
-          this.refreshing = false;
-        }
-
-        for (let i = 0; i < 1; i++) {
-          this.list.push(this.list.length + 1);
-        }
-        this.loading = false;
-
-        if (this.list.length >= 1) {
-          this.finished = true;
-        }
-      }, 1000);
+      // setTimeout(() => {
+      //   if (this.refreshing) {
+      //     this.list = [];
+      //     this.refreshing = false;
+      //   }
+      //   for (let i = 0; i < 1; i++) {
+      //     this.list.push(this.list.length + 1);
+      //   }
+      //   this.loading = false;
+      //   if (this.list.length >= 1) {
+      //     this.finished = true;
+      //   }
+      // }, 1000);
     },
     onRefresh() {
       // 清空列表数据
@@ -72,9 +82,48 @@ export default {
       this.onLoad();
     },
     onSearch() {
-      console.log('2123123123 ssss');
-    }
-  }
+      console.log("2123123123 ssss");
+    },
+
+    queryVoteInfoList() {
+      let params = {
+        voteTitle: this.voteTitle,
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+      };
+      $http.$axios.get("vote/list", params).then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.data);
+        } else {
+          Toast.fail({
+            message: "获取投票列表失败",
+            icon: "cross",
+          });
+        }
+      });
+    },
+  },
+  created: function () {
+    $http.$axios.get("vote/list", {
+      headers: {
+        'Authorization': localStorage.getItem("vote_token")
+      },
+      params: {
+        voteTitle: this.voteTitle,
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+      }
+    }).then((res) => {
+      if (res.status === 200) {
+        this.respData = res.data.data.records
+      } else {
+        Toast.fail({
+          message: "获取投票列表失败",
+          icon: "cross",
+        });
+      }
+    });
+  },
 };
 </script>
 
@@ -100,6 +149,6 @@ export default {
 }
 
 .van-search__action:active {
-    background-color: unset;
+  background-color: unset;
 }
 </style>

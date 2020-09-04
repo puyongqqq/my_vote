@@ -7,10 +7,10 @@
       <div class="uname">
         <div class="div-info">
           <p class="info">
-            蒲勇
+            {{username}}
             <van-tag round type="primary">管理员</van-tag>
           </p>
-          <p class="info">17384862350</p>
+          <p class="info">{{phone}}</p>
         </div>
       </div>
     </div>
@@ -34,25 +34,46 @@
   </div>
 </template>
 <script>
+import $http from "../utils/http.js";
+import { Toast } from "vant";
 import { Dialog } from "vant";
 export default {
   name: "myvote",
   data() {
     return {
+      username: "蒲勇",
+      phone: "13262356325",
+      gender: "男",
       checked: true,
       show: ""
     };
   },
+  created: function() {
+    $http.$axios.get("user/info/" + 1, null).then(res => {
+      if (res.status === 200) {
+        let user = res.data;
+        (this.username = user.username),
+          (this.phone = "17384862350"),
+          (this.gender = user.gender ? "女" : "男");
+      } else {
+        Toast.fail({
+          message: "获取个人信息失败",
+          icon: "cross"
+        });
+      }
+    });
+  },
   methods: {
-    logout () {
+    logout() {
       Dialog.confirm({
         title: "确定要退出登录？",
         confirmButtonColor: "blue"
-      }).then(() => {
+      })
+        .then(() => {
           localStorage.removeItem("vote_token");
-          this.$router.push({ path: '/login' })
-        }).catch(() => {
-        });
+          this.$router.push({ path: "/login" });
+        })
+        .catch(() => {});
     }
   }
 };

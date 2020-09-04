@@ -2,9 +2,9 @@ import axios from 'axios';
 // import qs from 'qs';
 
 var $axios = axios.create({
-    baseURL: 'http://localhost:8888/',
+    baseURL: 'http://192.168.28.136:8888/',
     timeout: 6000,
-    headers: {'Authorization': 'XMLHttpRequest'},
+    // headers: {'Authorization': localStorage.getItem('vote_token')},
 });
 
 // export const $get = (url, params) => {
@@ -14,6 +14,20 @@ var $axios = axios.create({
 //         }
 //     })
 // }
+
+$axios.interceptors.request.use(
+    config => {
+        // if (config.method !== 'get' && config.headers['Content-Type'] !== 'application/x-www-form-urlencoded') {
+        //     config.data = JSON.stringify(config.data);
+        // }
+        // config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        config.headers['Authorization'] = localStorage.getItem('vote_token');
+        return config;
+    },
+    error => {
+        return Promise.reject(error)
+    }
+)
 
 export default {
     $axios
@@ -36,7 +50,7 @@ export default {
 //       }, err => Promise.reject(err));
 //       // 设置响应拦截器
 //       instance.interceptors.response.use(res => res.data, err => Promise.reject(err));
-     
+
 //       return instance(config);
 //     }
 //   }
