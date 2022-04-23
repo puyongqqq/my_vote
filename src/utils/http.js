@@ -1,19 +1,15 @@
 import axios from 'axios';
+import router from 'vue-router';
+import { Toast } from "vant";
+
 // import qs from 'qs';
 
 var $axios = axios.create({
-    baseURL: 'http://192.168.28.136:8888/',
-    timeout: 6000,
+    baseURL: 'http://127.0.0.1:8888/',
+    eout: 6000,
     // headers: {'Authorization': localStorage.getItem('vote_token')},
 });
 
-// export const $get = (url, params) => {
-//     return $axios.get(url, params).then(res => {
-//         if (res.status === 200 && res.data.code === 200) {
-//             data = res.data
-//         }
-//     })
-// }
 
 $axios.interceptors.request.use(
     config => {
@@ -21,7 +17,7 @@ $axios.interceptors.request.use(
         //     config.data = JSON.stringify(config.data);
         // }
         // config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        config.headers['Authorization'] = localStorage.getItem('vote_token');
+        config.headers['Authorization'] = localStorage.getExpire('vote_token');
         return config;
     },
     error => {
@@ -29,29 +25,35 @@ $axios.interceptors.request.use(
     }
 )
 
+$axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    // 返回 401 清除token信息并跳转到登录页面
+                    localStorage.removeItem("vote_token");
+                    router.replace({
+                        path: '/login',
+                        query: { redirect: router.currentRoute.fullPath }
+                    })
+                    break;
+                case 403:
+
+                    Toast.fail({
+                        message: "无权访问",
+                        icon: "cross",
+                      });
+                    break;
+            }
+        }
+        return Promise.reject(error)   // 返回接口返回的错误信息
+    }
+);
+
+
 export default {
     $axios
 }
-
-// class Request {
-//     constructor() {
-//       this.baseURL = process.env.NODE_ENV === 'development' ? 'http://localhost:8066' : '/'; // 设置请求baseURL
-//       this.timeout = 2000; // 设置请求超时时间
-//     }
-//     request(config){// 这里的config是请求的时候传递的参数配置对象，比如url、method、data等
-//       const instance = axios.create({ // 创建axios实例
-//         baseURL: this.baseURL,
-//         timeout: this.timeout,
-//       });
-//       // 设置拦截器
-//       instance.interceptors.request.use((config) => { // 请求拦截之后就是要使用这个config, config表示整个请求对象
-//         config.headers.Authorization = localStorage.getItem('token'); // 将token从localStorage中取出并添加到请求头的Authorization字段上
-//         return config; // 返回请求对象，继续向服务器发起请求
-//       }, err => Promise.reject(err));
-//       // 设置响应拦截器
-//       instance.interceptors.response.use(res => res.data, err => Promise.reject(err));
-
-//       return instance(config);
-//     }
-//   }
-//   export default new Request();

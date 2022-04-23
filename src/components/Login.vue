@@ -77,7 +77,7 @@ export default {
           loading.clear();
           if (res.status === 200 && res.data.code === "200") {
             // 登录成功
-            localStorage.setItem("vote_token", res.data.token);
+            localStorage.setExpire("vote_token", res.data.token, 8 * 3600);
             this.$router.push({ path: "/list" });
           } else {
             // 登录失败

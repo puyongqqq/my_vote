@@ -91,7 +91,7 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
       };
-      $http.$axios.get("vote/list", params).then((res) => {
+      $http.$axios.get("/vote/vote/list", params).then((res) => {
         if (res.status === 200) {
           console.log(res.data.data);
         } else {

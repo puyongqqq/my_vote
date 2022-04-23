@@ -26,6 +26,7 @@
         <van-field
           v-model="caseItem1"
           rows="1"
+          name="caseItem"
           autosize
           :rules="[{ required: true, message: '请输入正确的内容' }]"
           type="textarea"
@@ -114,7 +115,7 @@ export default {
       caseDesc: "",
       caseItem1: "",
       checked: true,
-      switchChecked: true,
+      switchChecked: false,
       switchChecked2: false,
       currentDate: "",
       itemIndex: 1,
@@ -197,7 +198,8 @@ export default {
      */
     remove(i) {
       this.caseList.splice(i, 1);
-    }
+    },
+
   }
 };
 </script>

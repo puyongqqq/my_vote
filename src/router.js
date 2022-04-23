@@ -2,6 +2,9 @@
 import Vue from 'vue';
 //引入vue-router
 import VueRouter from 'vue-router';
+
+import { Toast } from "vant";
+
 //第三方库需要use一下才能用
 Vue.use(VueRouter)
 
@@ -87,24 +90,28 @@ const router = new VueRouter({
     routes
 });
 
-// router.beforeEach((to, _from, next) => {
-//     let title = to.meta && to.meta.title;
-//     if (title) {
-//         document.title = title;
-//     }
-//     if (to.matched.some(res => res.meta.requireAuth)) { // 验证是否需要登陆 
-//         if (localStorage.getItem('vote_token')) { // 查询本地存储信息是否已经登陆 
-//             next();
-//         } else {
-//             next({
-//                 path: '/login', // 未登录则跳转至login页面 
-//                 query: { redirect: to.fullPath } // 登陆成功后回到当前页面，这里传值给login页面，to.fullPath为当前点击的页面 
-//             });
-//         }
-//     } else {
-//         next();
-//     }
-// })
+router.beforeEach((to, _from, next) => {
+    let title = to.meta && to.meta.title;
+    if (title) {
+        document.title = title;
+    }
+    if (to.matched.some(res => res.meta.requireAuth)) { // 验证是否需要登陆 
+        if (localStorage.getExpire('vote_token')) { // 查询本地存储信息是否已经登陆 
+            next();
+        } else {
+            Toast.fail({
+                message: "身份已过期，请重新登录",
+                icon: "cross",
+              });
+            next({
+                path: '/login', // 未登录则跳转至login页面 
+                query: { redirect: to.fullPath } // 登陆成功后回到当前页面，这里传值给login页面，to.fullPath为当前点击的页面 
+            });
+        }
+    } else {
+        next();
+    }
+})
 
 // 抛出这个这个实例对象方便外部读取以及访问
 export default router
